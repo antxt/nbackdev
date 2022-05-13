@@ -2,7 +2,7 @@
 <html lang="en"> 
 <head> 
     <meta charset="UTF-8" />
-    <title>Making your first Phaser 3 Game - Part 3</title>
+    <title>NBack by @antxt</title>
     <script src="//cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js"></script>
     <style type="text/css">
         body {
@@ -24,18 +24,19 @@
             update: update
         }
     };
-
-    var game = new Phaser.Game(config);
+	var image;
+	var game = new Phaser.Game(config);
+	var timer;
+	var total = 0;
+    var is_game = 0;
 	var button;
 	
     function preload ()
     {
         this.load.image('sky', 'assets/sky.png');
-        this.load.image('ground', 'assets/platform.png');
-        this.load.image('star', 'assets/star.png');
-        this.load.image('bomb', 'assets/bomb.png');
 		this.load.image('field', 'assets/field.png');
 		this.load.image('button', 'assets/button.png');
+		this.load.image('button_start', 'assets/button_start.png');
 		this.load.image('square', 'assets/square.png');
 		/**this.load.spritesheet('button', 'assets/buttons/button.png', { frameWidth: 150, frameHeight: 150 });
 		this.load.spritesheet('square', 'assets/square.png', { frameWidth: 150, frameHeight: 150 });
@@ -45,6 +46,7 @@
 
     function create ()
     {
+		
         this.add.image(400, 300, 'sky');
 		this.add.image(150, 150, 'field');
 		this.add.image(300, 150, 'field');
@@ -58,6 +60,8 @@
 		/**this.add.image(450, 450, 'square');**/
 		/*this.add.image(650, 300, 'button')*/
 		
+		//timedEvent = this.time.addEvent({ delay: 500, callback: onEvent, callbackScope: this, loop: true });
+		timedEvent = this.time.addEvent({ delay: 2000, callback: onEvent, callbackScope: this });
 		
 		var sprite = this.add.sprite(650, 300, 'button').setInteractive();
 		sprite.on('pointerdown', function (pointer) {
@@ -77,12 +81,40 @@
 			this.clearTint();
 
 		});
+		
+		var sprite_start = this.add.sprite(650, 150, 'button_start').setInteractive();
+		sprite_start.on('pointerdown', function (pointer) {
+
+        this.setTint(0xff0000);
+		//timedEvent = game.time.addEvent({ delay: 500, callback: onEvent, callbackScope: this, loop: true });
+		is_game = 1;
+		});
+
+		sprite_start.on('pointerout', function (pointer) {
+
+			this.clearTint();
+
+		});
+
+		sprite_start.on('pointerup', function (pointer) {
+
+			this.clearTint();
+
+		});
 		}
 
     function update ()
     {
     }
-	
+	function onEvent ()
+	{
+		if(is_game == 1)
+			{
+			this.add.image(150, 150, 'square');
+			//alert( "square" );
+			}
+		
+	}
 </script>
 
 </body>
