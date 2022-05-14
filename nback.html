@@ -29,8 +29,9 @@
 	var timer;
 	var total = 0;
     var is_game = 0;
+	var move_number = 0;
 	var button;
-	
+	var square_image;
     function preload ()
     {
         this.load.image('sky', 'assets/sky.png');
@@ -61,8 +62,21 @@
 		/*this.add.image(650, 300, 'button')*/
 		
 		//timedEvent = this.time.addEvent({ delay: 500, callback: onEvent, callbackScope: this, loop: true });
-		timedEvent = this.time.addEvent({ delay: 2000, callback: onEvent, callbackScope: this });
+		//timedEvent = this.time.addEvent({ delay: 2000, callback: onEvent, callbackScope: this });
 		
+		var timer = this.time.addEvent({
+					delay: 1000,                // ms
+					callback: onEvent,
+					args: [],
+					callbackScope: this,
+					loop: false,
+					repeat: 20,
+					startAt: 0,
+					timeScale: 1,
+					paused: false
+				});
+
+
 		var sprite = this.add.sprite(650, 300, 'button').setInteractive();
 		sprite.on('pointerdown', function (pointer) {
 
@@ -108,12 +122,63 @@
     }
 	function onEvent ()
 	{
-		if(is_game == 1)
+		if(is_game == 1  && move_number == 0) 
 			{
-			this.add.image(150, 150, 'square');
+			square_image = this.add.image(150, 150, 'square');
+			
 			//alert( "square" );
 			}
+		if(is_game == 1 && move_number == 1)
+			{
+			square_image.visible  = false
+			square_image = this.add.image(150, 300, 'square');
+			//;
+			//alert( "square" );
+			}
+		if(is_game == 1 && move_number == 2)
+			{
+			square_image.visible  = false
+			square_image = this.add.image(300, 150, 'square');
+			//;
+			//alert( "square" );
+			}
+		if(is_game == 1 && move_number == 3)
+			{
+			square_image.visible  = false
+			square_image = this.add.image(300, 300, 'square');
+			//;
+			//alert( "square" );
+			}
+		if(is_game == 1 && move_number == 4)
+			{
+			square_image.visible  = false
+			square_image = this.add.image(300, 450, 'square');
+			//;
+			//alert( "square" );
+			}
+		if(is_game == 1 && move_number == 5)
+			{
+			square_image.visible  = false
+			square_image = this.add.image(150, 150, 'square');
+			//;
+			//alert( "square" );
+			}
+		if(is_game == 1 && move_number == 6)
+			{
+			square_image.visible  = false
+			is_game = 0;
+			move_numer = 0;
+			//square_image = this.add.image(150, 150, 'square');
+			//;
+			//alert( "square" );
+			}			
+		//alert(move_number);
+		if(is_game == 1)
+			{
+				move_number = move_number + 1;
+			}
 		
+		//game.debug.text('Step: ' + move_number.toFixed(0), 32, 32);
 	}
 </script>
 
