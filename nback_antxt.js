@@ -21,6 +21,14 @@ var config = {
 	var pos_minus_two;
 	var x, y;
 	var tick;
+	var start_enabled;
+	var stop_enabled;
+	var gotcha_enabled;
+	var sprite_start;
+	var sprite_stop;
+	start_enabled = true;
+	stop_enabled = false;
+	gotcha_enabled = true;
 	tick = 1;
 	pos_minus_two = -1;
 	pos_minus_one = -1;
@@ -48,17 +56,7 @@ var config = {
 		this.add.image(300, 450, 'field');
 		this.add.image(450, 450, 'field');
 		this.add.text(25, 25, 'Single 2-Back Training by @antxt', {font: '18px Arial', fill: '#fff'});
-		var timer = this.time.addEvent({
-					delay: 500,                // ms
-					callback: onEvent,
-					args: [],
-					callbackScope: this,
-					loop: false,
-					repeat: 500,
-					startAt: 0,
-					timeScale: 1,
-					paused: true
-				});
+		
 		
 		square_image = this.add.image(150, 300, 'square');
 		square_image.visible  = false
@@ -117,51 +115,83 @@ var config = {
 			this.clearTint();
 
 		});
-		var sprite_stop = this.add.sprite(650, 450, 'button_stop').setInteractive();
+		sprite_stop = this.add.sprite(650, 450, 'button_stop').setInteractive();
 		sprite_stop.on(
 			'pointerdown',
 			function (pointer)
 				{
-				this.setTint(0xff0000);
-				timer.paused = true;
+				
+				if(stop_enabled)
+				{	
+					this.setTint(0xff0000);
+					timer.paused = true;
+					start_enabled = true;
+					stop_enabled = false;
+					start_enabled = true;
+					stop_enabled = false;
+					gotcha_enabled = true;
+					tick = 1;
+					pos_minus_two = -1;
+					pos_minus_one = -1;
+					set_button_state();
+					is_game = 0;
+				}
 				}
 		);
 		sprite_stop.on(
 			'pointerout',
 			function (pointer)
 				{
-				this.clearTint();
+					if(stop_enabled)
+					{
+					this.clearTint();
+					}
 				}
 		);
 		sprite_stop.on(
 			'pointerup',
 			function (pointer)
 				{
-				this.clearTint();
+					if(stop_enabled)
+					{
+					this.clearTint();
+					}
+				
 				}
 		);
 		
-		var sprite_start = this.add.sprite(650, 150, 'button_start').setInteractive();
+		sprite_start = this.add.sprite(650, 150, 'button_start').setInteractive();
 		sprite_start.on('pointerdown', function (pointer)
 		{
 			if(is_game == 0)
 			{
-			this.setTint(0xff0000);
-			//timedEvent = game.time.addEvent({ delay: 500, callback: onEvent, callbackScope: this, loop: true });
-			is_game = 1;
-			move_number = 0;
-			timer.paused = false;
-			//alert("boop!");
-			}
-			if(is_game == 1)
-			{
-			this.setTint(0xff0000);
-			//timedEvent = game.time.addEvent({ delay: 500, callback: onEvent, callbackScope: this, loop: true });
-			is_game = 1;
-			square_image.visible  = false
-			move_number = 0;
-			tick = 0;
-			//alert("boop!");
+				if(start_enabled)
+				{
+					this.setTint(0xff0000);
+					//timedEvent = game.time.addEvent({ delay: 500, callback: onEvent, callbackScope: this, loop: true });
+					is_game = 1;
+					move_number = 0;
+					timer.paused = false;
+					start_enabled = false;
+					stop_enabled = true;
+					
+					//alert("boop!");
+					if(is_game == 1)
+					{
+						this.setTint(0xff0000);
+						//timedEvent = game.time.addEvent({ delay: 500, callback: onEvent, callbackScope: this, loop: true });
+						is_game = 1;
+						square_image.visible  = false
+						move_number = 0;
+						tick = 0;
+						//alert("boop!");
+					}
+					//console.log(start_enabled);
+				}
+				else
+				{
+					//do nothing
+				}
 			}
 		});
 
@@ -169,7 +199,10 @@ var config = {
 			'pointerout',
 			function (pointer)
 			{
-			this.clearTint();
+				if(start_enabled)
+				{
+				this.clearTint();
+				}
 			}
 		);
 
@@ -177,11 +210,30 @@ var config = {
 			'pointerup',
 			function (pointer)
 			{
-			this.clearTint();
+				if(start_enabled)
+				{
+				this.clearTint();
+				}
 			}
 		);
-		}
-
+		
+		var timer = this.time.addEvent({
+					delay: 500,                // ms
+					callback: onEvent,
+					args: [],
+					callbackScope: this,
+					loop: false,
+					repeat: 500,
+					startAt: 0,
+					timeScale: 1,
+					paused: true
+				});
+				
+		set_button_state();	
+				
+				
+		} //end create
+	
     function update ()
     {
     }
@@ -232,6 +284,26 @@ var config = {
 		}
 		return x;
 		//console.log(x + " " + y);
+	}
+	function set_button_state()
+	{
+		if(start_enabled)
+		{
+			sprite_start.clearTint();
+		}
+		else
+		{
+			sprite_start.setTint(0x808080);
+		}
+				
+		if(stop_enabled)
+		{
+			sprite_stop.clearTint();
+		}
+		else
+		{
+			sprite_stop.setTint(0x808080);
+		}
 	}
 	function draw_square_y()
 	{
@@ -318,6 +390,6 @@ var config = {
 		//if(is_game == 1)
 		//	{
 				tick = tick + 1;
-				
+				set_button_state();
 		//	}
 	}
